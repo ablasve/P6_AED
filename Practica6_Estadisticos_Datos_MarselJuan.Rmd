@@ -129,7 +129,13 @@ etc    |
 
 
 ```{r Solucion_Ej3, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+Datos %>% 
+  summarise(across(ends_with(".num"),list(media=~mean(.x,na.rm=TRUE),sd=~sd(.x,na.rm=TRUE),mediana=~median(.x,na.rm=TRUE), iqr = ~IQR(.x,na.rm=TRUE)))) %>% 
+  pivot_longer(everything(), names_to = "nombres_combinados", values_to = "valores") %>% 
+  separate(nombres_combinados,c("asignatura","stat"),"_") %>% 
+  pivot_wider(names_from = stat, values_from = valores) %>% 
+  mutate(mean_sd = paste(media, sd, sep = "±"))
+  
 ```
 
 ## Ejercicio 4: Distribución de datos
@@ -148,7 +154,10 @@ Representa gráficamente la curva de notas de la asignatura ALG estimando la dis
 Compara la distribución de probabilidad de las notas de la asignatura ANM con la de una Gaussiana empleando la función `qqPlot` (quantile-quantile plot) de la librería `car`, que representa gráficamente los cuantiles de la distribución analizada respecto de los de una distribución normal (Gaussiana).
 
 ```{r Solucion_Ej5, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+valores <- Datos %>% pivot_longer(cols=ends_with(".num"), names_to = "asignatura", values_to = "valor") %>% 
+  filter(asignatura=="ANM.num")
+library(car)
+qqPlot(valores$valor)
 ```
 
 # Análisis univariante de variables categóricas
