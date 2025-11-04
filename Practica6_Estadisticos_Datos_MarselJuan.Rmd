@@ -98,8 +98,10 @@ Datos <- Datos %>% mutate(across(ends_with(".cat"),as.factor))
 Inspecciona visualmente los valores del conjunto de datos (`View`) y ordena de mayor a menor y de menor a mayor cada variable.
 
 ```{r Solucion_Ej2, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+View(Datos)
 ```
+Hay más de una variable categórica de tipo string sin normalizar
+
 
 # Análisis univariante de variables numéricas
 
