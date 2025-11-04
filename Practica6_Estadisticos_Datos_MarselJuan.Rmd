@@ -146,7 +146,7 @@ Representa gráficamente la curva de notas de la asignatura ALG estimando la dis
   - Compara el resultado con la media de las notas para esa asignatura. Puedes marcar dicha media en el gráfico con `geom_point` o con `geom_vline()` especificando el parámetro `xintercept`.
 
 ```{r Solucion_Ej4, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+ggplot(Datos, aes(x = ALG.num)) + geom_histogram(aes(y=stat(density))) + geom_density() + geom_vline(xintercept = mean(Datos$ALG.num,na.rm=TRUE))
 ```
 
 ## Ejercicio 5: Test de normalidad de la distribución de datos
