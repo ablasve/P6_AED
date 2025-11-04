@@ -171,8 +171,9 @@ Vamos a calcular la frecuencia de cada valor en las variables categóricas de ca
   * Representa la tabla de contingencia usando `mosaicplot`.
 
 ```{r Solucion_Ej6, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
-
+table(Datos$ALG.cat)
+table(Datos$ALG.cat, Datos$ANM.cat)
+mosaicplot(~ ALG.cat + ANM.cat, data = Datos)
 ```
 
 # Análisis bivariante de variables numéricas
@@ -183,17 +184,32 @@ Vamos a calcular la frecuencia de cada valor en las variables categóricas de ca
   * Compara los resultados para el coeficiente de correlación de Pearson (para variables numéricas) y de Spearman (para variables numéricas ordinales).
 
 ```{r Solucion_Ej7, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+cat("Pearson\n")
+Datos %>% 
+  select(ends_with(".num"),) %>% 
+  cor(use = "complete.obs", method = "pearson")
+cat("\n Spearman\n")
+Datos %>% 
+  select(ends_with(".num"),) %>% 
+  cor(use = "complete.obs", method = "spearman")
 ```
 
 La correlación de Pearson sirve para cuando la relación entre dos variables es lineal, mientras que la de Spearman es robusta frente a relaciones no lineales en datos ordenados.
 
-**Nota**:(La correlación de Spearman calcula la correlación entre los rangos de las secuencias. El rango de una secuencia es otra secuencia de la misma longitud cuyos valores son las  posiciones que ocuparía el valor de la variable original cuando la secuencia de partida se ordena en orden creciente, por ejmplo, si aa<-c(1,3.8,5,2.3), rank(aa) es la secuencia (1,3,4,2), ya que estas serían las posiciones en la secuencia ordenada de los valores de la secuencia inicial.). Cualquier función creciente (lineal o no lineal), aplicada sobre los datos no modifica el resultado de la correlación de Spearman.
+**Nota**:(La correlación de Spearman calcula la correlación entre los rangos de las secuencias. El rango de una secuencia es otra secuencia de la misma longitud cuyos valores son las  posiciones que ocuparía el valor de la variable original cuando la secuencia de partida se ordena en orden creciente, por ejemplo, si aa<-c(1,3.8,5,2.3), rank(aa) es la secuencia (1,3,4,2), ya que estas serían las posiciones en la secuencia ordenada de los valores de la secuencia inicial.). Cualquier función creciente (lineal o no lineal), aplicada sobre los datos no modifica el resultado de la correlación de Spearman.
 
 Para comprobarlo, vamos a aplicar una función no lineal a una de las variables y a calcular la correlación usando los métodos de Pearson y Spearman. Compruébalo entre las variables `sqrt(ALG.num)` y `MD.num`, comparando con los resultados anteriores. 
 
 ```{r Solucion_Ej7 bis, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+Datos <- Datos %>%  mutate(sqrtALG.num = sqrt(ALG.num))
+cat("Pearson\n")
+Datos %>% 
+  select(ends_with(".num"),) %>% 
+  cor(use = "complete.obs", method = "pearson")
+cat("\n Spearman\n")
+Datos %>% 
+  select(ends_with(".num"),) %>% 
+  cor(use = "complete.obs", method = "spearman")
 ```
 
 ## Ejercicio 8: Representación gráfica de correlación entre variables
@@ -202,7 +218,10 @@ Dibuja las matrices de correlación del conjunto de notas numéricas.
 Podemos usar `pairs` del paquete base o bien `ggcorr` y `ggpairs` de la librería `GGally`.
 
 ```{r Solucion_Ej8, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+library(GGally)
+Datos %>% 
+  select(ends_with(".num")) %>% 
+  ggpairs()
 ```
 
 # Análisis bivariante de variables categóricas
